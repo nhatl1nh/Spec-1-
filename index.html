@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Creative Webpage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            cursor: none; /* Hide the default cursor */
+        }
+#custom-cursor {
+    cursor: none; /* This is redundant here as we hide the system cursor on the body */
+    background-color: #fff; /* Or any color you prefer for the cursor */
+    position: fixed;
+    text-align: center; /* Not really applicable for a square, but won't hurt */
+    width: 20px; /* Adjust the size of your square */
+    height: 20px; /* Adjust the size of your square */
+    z-index: 1000; /* Ensure it's on top */
+    transform: translate(-50%, -50%); /* Center it on the mouse */
+    pointer-events: none; /* Ensure it doesn't interfere with clicks */
+    mix-blend-mode: difference; /* The magic for the color effect */
+    overflow: hidden; /* Not typically needed for a simple square, but can be kept */
+    /* border-radius: 50%; */ /* If you want a circle, uncomment this */
+}
+/* Example effect on hover for all links */
+ a:hover ~ #custom-cursor {
+        /* You might want to keep transform effects like scale */
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    #video-play-button:active ~ #custom-cursor {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    #submit-button:hover ~ #custom-cursor {
+        transform: translate(-50%, -50%) translateX(5px);
+    }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
+        .hamburger-line {
+            width: 100%;
+            height: 2px;
+            background-color: black;
+            margin: 3px 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .hamburger.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            background-color: black;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            padding: 20px;
+            align-items: center;
+            z-index: 20;
+        }
+        .nav-menu.active {
+            display: flex;
+        }
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            position: relative; /* To position the underline */
+            transition: transform 0.2s ease; /* Smooth transition for scale */
+            display: inline-block; /* Important for scaling the text itself */
+        }
+
+        .nav-menu a:hover {
+             transform: scale(1.2); /* Scale up on hover */
+        }
+
+        .nav-menu a::after {
+            content: ''; /* Empty content, the dot is created with styling */
+            position: absolute;
+            bottom: -8px; /* Position below the text */
+            left: 50%; /* Start from the center horizontally */
+            transform: translateX(-50%); /* Precisely center the dot */
+            width: 6px; /* Diameter of the dot */
+            height: 6px; /* Diameter of the dot */
+            background-color: white; /* Color of the dot */
+            border-radius: 50%; /* Make it a circle */
+            opacity: 0; /* Initially invisible */
+            transition: opacity 0.2s ease, transform 0.2s ease; /* Add transform transition */
+            transform-origin: center;
+        }
+
+        .nav-menu a:hover::after {
+            opacity: 1; /* Show the dot on hover */
+            /* Scale up the dot */
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .header-nav {
+                display: none;
+            }
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                width: 100%;
+                border-radius: 0 0 10px 10px;
+            }
+        }
+       @media (min-width: 769px){
+    .nav-menu{
+        display: flex !important; /* Show the menu items in a row */
+        flex-direction: row;
+        position: static; /* Reset positioning */
+        top: auto;
+        right: auto;
+        left: auto;
+        padding: 0;
+        background-color: transparent;
+        width: 100%; /* Make the nav menu take full width */
+        justify-content: space-between; /* Distribute space between items */
+    }
+    .nav-menu a{
+        margin: 0; /* Remove default margin */
+        color: white;
+    }
+    .hamburger{
+        display: none; /* Hide the hamburger menu */
+    }
+    .header-nav{
+        display: flex; /* Show the full navigation */
+        width: 100%;
+    }
+}
+
+        .heading-bar {
+            height: 4px;
+            background-color: black;
+            width: 0%;
+            transition: width 2s ease-in-out;
+            margin-top: 10px;
+        }
+
+        .heading-bar.animate {
+            width: 100%;
+        }
+
+        #main-header {
+            position: fixed; /* Always fixed to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20; /* Ensure it's above other content */
+            background-color: rgba(0, 0, 0, 0.95); /* Consistent dark background */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            display: flex; /* Use flexbox for centering */
+            justify-content: center;
+            align-items: center;
+        }
+        #main-header h1{
+            color: white;
+            display: none; /* remove the header text */
+        }
+        #main-header .nav-menu a{
+            color: white;
+        }
+
+        #home {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://placehold.co/1920x1080/EEE/31343C'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            cursor: url('cursor.png'), auto;
+        }
+        #home:active{
+            cursor: url('cursor-active.png'), auto;
+        }
+
+        .hover-image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hover-image-wrapper .hover-image {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 100%; /* Position below the text */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            transition: visibility 0s, opacity 0.2s ease-in-out;
+            max-width: 200px; /* Adjust as needed */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 2px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .hover-image-wrapper:hover .hover-image {
+            visibility: visible;
+            opacity: 1;
+            top: 120%; /* Adjust as needed */
+        }
+        .section-heading-bar {
+            height: 4px;
+            background-color: black;
+            width: 0%;
+            transition: width 2s ease-in-out;
+            margin-top: 10px;
+        }
+
+        .heading-bar.animate {
+            width: 100%;
+        }
+
+        #paragraph .section-heading-bar{
+            background-color: blue;
+        }
+        #cta .section-heading-bar{
+            background-color: green;
+        }
+        #video .section-heading-bar{
+            background-color: yellow;
+        }
+        #interactive .section-heading-bar{
+            background-color: orange;
+        }
+        #poster .section-heading-bar{
+            background-color: purple;
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    </style>
+    <div id="custom-cursor"></div>
+    <header id="main-header" class="w-full py-6 shadow-lg z-20">
+        <div class="container mx-auto px-10 flex justify-between items-center relative">
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+                My Creative Webpage
+            </h1>
+            <nav class="header-nav">
+                <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#paragraph">Paragraph</a></li>
+                <li><a href="#cta">Call to Action</a></li>
+                <li><a href="#video">Video</a></li>
+                <li><a href="#interactive">Interactive</a></li>
+                <li><a href="#poster">Poster</a></li>
+            </ul>
+                </nav>
+            <button id="hamburger-btn" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+        </div>
+    </header>
+
+    <section id="home" class="bg-white text-black py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4 text-black">
+                Clean air is not a privilege; 
+                it is a human right.
+            </h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                <span class="hover-image-wrapper"><a href="#" class="text-blue-500 hover:underline">Dr. Maria Neira</a><img src="https://placehold.co/200x200/EEE/31343C" alt="Dr Maria" class="hover-image"/></span>
+            </p>
+            <div class="heading-bar"></div>
+        </div>
+    </section>
+
+    <section id="paragraph" class="py-16 md:py-24 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-right">Paragraph Section</h2>
+            <p class="text-lg text-gray-700 leading-relaxed max-w-4xl ml-auto text-right">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p class="text-lg text-gray-700 mt-6 leading-relaxed max-w-4xl ml-auto text-right">
+                Additional details about our creative process and values can be found here. We believe in fostering a collaborative environment where ideas can flourish and transform into impactful solutions. Our team is dedicated to pushing the boundaries of design and technology to create memorable experiences.
+            </p>
+            <div class="section-heading-bar"></div>
+        </div>
+    </section>
+
+    <section id="cta" class="py-16 md:py-24 bg-black text-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 max-w-3xl mx-auto">From unity to mindful energy consumption: the clear road to cleaner air and healthier lives.</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto mb-8">
+                DAUICSBXJCABKI
+            </p>
+            <button class="bg-white text-black border border-black rounded-md py-3 px-6
+                            hover:bg-gray-200 hover:scale-105
+                            transition-all duration-300 shadow-lg hover:shadow-xl text-lg">
+                Contact Us
+            </button>
+            <div class="section-heading-bar"></div>
+        </div>
+    </section>
+
+    <section id="video" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-black mb-4">Featured Video</h2>
+                <p class="text-gray-600 text-lg">Watch our latest showcase of creativity and technology.</p>
+            </div>
+            <div class="relative rounded-xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+                <video id="featured-video" src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                       class="w-full aspect-video" loop muted></video>
+                <button id="video-play-button" class="absolute inset-0 flex items-center justify-center bg-black/50
+                                                    transition-opacity duration-300 hover:bg-black/70 cursor-pointer"
+                        title="Play Video">
+                    <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-white">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                    <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-white" style="display: none;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <rect x="9" y="9" width="2" height="6"></rect>
+                        <rect x="13" y="9" width="2" height="6"></rect>
+                    </svg>
+                </button>
+            </div>
+            <div class="section-heading-bar"></div>
+        </div>
+    </section>
+
+    <section id="interactive" class="py-16 md:py-24 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Interactive Experience</h2>
+                <p class="text-gray-400 text-lg">
+                    Engage with our interactive component and send us your message.
+                </p>
+            </div>
+            <div class="max-w-md mx-auto bg-black rounded-xl shadow-lg p-6 space-y-4">
+                <h3 class="text-white text-2xl font-semibold">Send a Message</h3>
+                <p class="text-gray-400">Enter your message below and submit.</p>
+                <input type="text" id="message-input" placeholder="Your message..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-md py-3 px-4 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                <p id="message-error" class="text-red-500 text-sm mt-2" style="display: none;"></p>
+                <p id="message-success" class="text-green-500 text-sm mt-2" style="display: none;"></p>
+                <button id="submit-button" class="w-full bg-white text-black rounded-md py-3
+                                                    hover:bg-gray-200 hover:scale-105
+                                                    transition-all duration-300 shadow-md text-lg">
+                    Submit
+                </button>
+            </div>
+            <div class="section-heading-bar"></div>
+        </div>
+    </section>
+
+    <section id="poster" class="py-16 md:py-24 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Featured Poster</h2>
+                <p class="text-gray-400 text-lg">Check out our latest poster design.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="rounded-xl overflow-hidden shadow-lg max-w-md">
+                    <img src="https://placehold.co/800x1200/EEE/31343C" alt="Featured Poster 1" class="w-full h-auto"/>
+                </div>
+                <div class="rounded-xl overflow-hidden shadow-lg max-w-md">
+                    <img src="https://placehold.co/800x1200/EEE/31343C" alt="Featured Poster 2" class="w-full h-auto"/>
+                </div>
+            </div>
+            <div class="section-heading-bar"></div>
+        </div>
+    </section>
+
+    <footer class="bg-black text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400 text-md">© 2024 My Creative Space. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const video = document.getElementById('featured-video');
+        const playButton = document.getElementById('video-play-button');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const customCursor = document.getElementById('custom-cursor');
+
+        document.addEventListener('mousemove', (e) => {
+    customCursor.style.left = e.clientX + 'px';
+    customCursor.style.top = e.clientY + 'px';
+});
+
+        playButton.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                playButton.title = 'Pause Video';
+            } else {
+                video.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                playButton.title = 'Play Video';
+            }
+        });
+
+        const messageInput = document.getElementById('message-input');
+        const submitButton = document.getElementById('submit-button');
+        const messageError = document.getElementById('message-error');
+        const messageSuccess = document.getElementById('message-success');
+        
+
+        submitButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+
+            messageError.style.display = 'none';
+            messageSuccess.style.display = 'none';
+
+            if (message === '') {
+                messageError.textContent = 'Please enter a message.';
+                messageError.style.display = 'block';
+                return;
+            }
+
+            // Simulate an asynchronous operation
+            setTimeout(() => {
+                messageSuccess.textContent = `Thank you! Your message "${message}" has been received.`;
+                messageSuccess.style.display = 'block';
+                messageInput.value = ''; // Clear the input
+            }, 1500);
+        });
+
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        const header = document.getElementById('main-header');
+
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                e.target.style.transform = 'scale(1.2)';
+                e.target.style.transition = 'transform 0.2s ease';
+            });
+            link.addEventListener('mouseleave', (e) => {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.transition = 'transform 0.2s ease';
+            });
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+    </script>
+</body>
+</html>
